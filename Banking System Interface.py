@@ -66,6 +66,7 @@ class Account:
             raise ValueError("Deposit amount must be greater than zero.")
         self.balance += amount
         self.transactions.append(Transaction("Deposit", amount))
+        self.export_balance_update()
 
     def withdraw(self, amount: float):
         """
@@ -83,6 +84,7 @@ class Account:
             raise ValueError("Insufficient funds.")
         self.balance -= amount
         self.transactions.append(Transaction("Withdrawal", amount))
+        self.export_balance_update()
 
     def transfer(self, target_account: 'Account', amount: float):
         """
@@ -103,6 +105,8 @@ class Account:
         target_account.balance += amount
         self.transactions.append(Transaction("Transfer Out", amount, target_account.account_id))
         target_account.transactions.append(Transaction("Transfer In", amount, self.account_id))
+        self.export_balance_update()
+        target_account.export_balance_update()
 
     def calculate_interest(self, annual_rate: float, months: int = 1):
         """
@@ -144,6 +148,32 @@ class Account:
             list: A list of dictionaries representing all transactions.
         """
         return [t.to_dict() for t in self.transactions]
+
+    def export_balance_update(self):
+        """
+        Export the account balance to the CSV file after any balance update.
+        """
+        with open("accounts.csv", "r") as csvfile:
+            reader = list(csv.DictReader(csvfile))
+
+        with open("accounts.csv", "w", newline="") as csvfile:
+            fieldnames = ["account_id", "name", "account_type", "balance"]
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writeheader()
+            updated = False
+            for row in reader:
+                if row["account_id"] == self.account_id:
+                    row["balance"] = f"{self.balance:.2f}"
+                    updated = True
+                writer.writerow(row)
+
+            if not updated:
+                writer.writerow({
+                    "account_id": self.account_id,
+                    "name": self.name,
+                    "account_type": self.account_type,
+                    "balance": f"{self.balance:.2f}",
+                })
 
 
 class Bank:
