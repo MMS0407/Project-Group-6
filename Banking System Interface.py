@@ -1,4 +1,5 @@
 import uuid
+import csv
 from typing import List, Dict, Optional
 
 
@@ -151,6 +152,13 @@ class Bank:
     def __init__(self):
         """Initialize the bank with an empty account database."""
         self.accounts: Dict[str, Account] = {}
+        self.load_initial_accounts()
+
+    def load_initial_accounts(self):
+        """Generate and load initial sample accounts into the bank."""
+        for i in range(20):
+            self.create_account(f"User{i+1}", "Checking", 1000.0)
+        self.export_accounts_to_csv()
 
     def create_account(self, name: str, account_type: str = "Checking", initial_balance: float = 0.0) -> str:
         """
@@ -166,8 +174,25 @@ class Bank:
         """
         account = Account(name, account_type, initial_balance)
         self.accounts[account.account_id] = account
+        self.export_accounts_to_csv()
         print(f"Account created for {name}. Account ID: {account.account_id}")
         return account.account_id
+
+    def delete_account(self, account_id: str):
+        """
+        Delete an account by ID.
+
+        Args:
+            account_id (str): The ID of the account to delete.
+
+        Raises:
+            ValueError: If the account ID is not found.
+        """
+        if account_id not in self.accounts:
+            raise ValueError("Account not found.")
+        del self.accounts[account_id]
+        self.export_accounts_to_csv()
+        print(f"Account {account_id} has been deleted.")
 
     def get_account(self, account_id: str) -> Account:
         """
@@ -190,6 +215,20 @@ class Bank:
         for account_id, account in self.accounts.items():
             print(f"ID: {account_id} | Name: {account.name} | Type: {account.account_type} | Balance: ${account.balance:.2f}")
 
+    def export_accounts_to_csv(self):
+        """Export all account data to a CSV file."""
+        with open("accounts.csv", "w", newline="") as csvfile:
+            fieldnames = ["account_id", "name", "account_type", "balance"]
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writeheader()
+            for account in self.accounts.values():
+                writer.writerow({
+                    "account_id": account.account_id,
+                    "name": account.name,
+                    "account_type": account.account_type,
+                    "balance": account.balance,
+                })
+
 
 class BankCLI:
     """CLI for the banking system."""
@@ -210,7 +249,8 @@ class BankCLI:
             print("6. Filter Transactions by Type")
             print("7. Calculate Interest (Savings Accounts)")
             print("8. List All Accounts")
-            print("9. Exit")
+            print("9. Delete Account")
+            print("10. Exit")
             choice = input("Choose an option: ")
 
             if choice == "1":
@@ -230,6 +270,8 @@ class BankCLI:
             elif choice == "8":
                 self.bank.list_accounts()
             elif choice == "9":
+                self.delete_account()
+            elif choice == "10":
                 print("Exiting the banking system. Goodbye!")
                 break
             else:
@@ -245,6 +287,14 @@ class BankCLI:
             print("Invalid input. Initial balance must be a number.")
             return
         self.bank.create_account(name, account_type, initial_balance)
+
+    def delete_account(self):
+        """Handle account deletion."""
+        account_id = input("Enter account ID to delete: ")
+        try:
+            self.bank.delete_account(account_id)
+        except ValueError as e:
+            print(e)
 
     def deposit_money(self):
         """Handle money deposit."""
