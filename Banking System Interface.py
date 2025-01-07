@@ -1,6 +1,7 @@
 import uuid
 import csv
 from typing import List, Dict, Optional
+import random
 
 
 class Transaction:
@@ -38,19 +39,27 @@ class Transaction:
 class Account:
     """Represents a bank account with balance and transaction history."""
 
-    def __init__(self, name: str, account_type: str = "Checking", initial_balance: float = 0.0):
+    def __init__(self, first_name: str, last_name: str, age: int, state: str, job: str, account_type: str = "Checking", initial_balance: float = 0.0):
         """
         Initialize a bank account.
 
         Args:
-            name (str): The name of the account holder.
+            first_name (str): The first name of the account holder.
+            last_name (str): The last name of the account holder.
+            age (int): The age of the account holder.
+            state (str): The state in the US where the account holder resides.
+            job (str): The job title of the account holder.
             account_type (str): The type of account (Checking or Savings).
             initial_balance (float): The initial account balance (default: 0.0).
         """
         if account_type not in ["Checking", "Savings"]:
             raise ValueError("Invalid account type. Must be 'Checking' or 'Savings'.")
         self.account_id = str(uuid.uuid4())
-        self.name = name
+        self.first_name = first_name
+        self.last_name = last_name
+        self.age = age
+        self.state = state
+        self.job = job
         self.account_type = account_type
         self.balance = initial_balance
         self.transactions: List[Transaction] = []
@@ -108,26 +117,6 @@ class Account:
         self.export_balance_update()
         target_account.export_balance_update()
 
-    def calculate_interest(self, annual_rate: float, months: int = 1):
-        """
-        Calculate interest for savings accounts.
-
-        Args:
-            annual_rate (float): The annual interest rate (e.g., 0.05 for 5%).
-            months (int): The number of months for which to calculate interest.
-
-        Raises:
-            ValueError: If the account type is not 'Savings' or invalid interest rate.
-        """
-        if self.account_type != "Savings":
-            raise ValueError("Interest calculation is only applicable to savings accounts.")
-        if annual_rate <= 0 or months <= 0:
-            raise ValueError("Interest rate and duration must be positive values.")
-        monthly_rate = annual_rate / 12
-        interest = self.balance * monthly_rate * months
-        self.deposit(interest)
-        print(f"Interest of ${interest:.2f} added to account {self.account_id}.")
-
     def filter_transactions(self, transaction_type: str) -> List[Transaction]:
         """
         Filter transactions by type.
@@ -157,7 +146,7 @@ class Account:
             reader = list(csv.DictReader(csvfile))
 
         with open("accounts.csv", "w", newline="") as csvfile:
-            fieldnames = ["account_id", "name", "account_type", "balance"]
+            fieldnames = ["account_id", "first_name", "last_name", "age", "state", "job", "account_type", "balance"]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
             updated = False
@@ -170,10 +159,26 @@ class Account:
             if not updated:
                 writer.writerow({
                     "account_id": self.account_id,
-                    "name": self.name,
+                    "first_name": self.first_name,
+                    "last_name": self.last_name,
+                    "age": self.age,
+                    "state": self.state,
+                    "job": self.job,
                     "account_type": self.account_type,
                     "balance": f"{self.balance:.2f}",
                 })
+
+    def export_transaction_history_to_csv(self):
+        """
+        Export the transaction history of the account to a separate CSV file.
+        """
+        filename = f"{self.account_id}_transactions.csv"
+        with open(filename, "w", newline="") as csvfile:
+            fieldnames = ["type", "amount", "target_account", "timestamp"]
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writeheader()
+            for transaction in self.transactions:
+                writer.writerow(transaction.to_dict())
 
 
 class Bank:
@@ -187,25 +192,29 @@ class Bank:
     def load_initial_accounts(self):
         """Generate and load initial sample accounts into the bank."""
         for i in range(20):
-            self.create_account(f"User{i+1}", "Checking", 1000.0)
+            self.create_account(f"User{i+1}", "LastName", 30 + i, "State", "Job", "Checking", 1000.0)
         self.export_accounts_to_csv()
 
-    def create_account(self, name: str, account_type: str = "Checking", initial_balance: float = 0.0) -> str:
+    def create_account(self, first_name: str, last_name: str, age: int, state: str, job: str, account_type: str = "Checking", initial_balance: float = 0.0) -> str:
         """
         Create a new account.
 
         Args:
-            name (str): The name of the account holder.
+            first_name (str): The first name of the account holder.
+            last_name (str): The last name of the account holder.
+            age (int): The age of the account holder.
+            state (str): The state where the account holder resides.
+            job (str): The job title of the account holder.
             account_type (str): The type of account (Checking or Savings).
             initial_balance (float): The initial balance for the account.
 
         Returns:
             str: The ID of the created account.
         """
-        account = Account(name, account_type, initial_balance)
+        account = Account(first_name, last_name, age, state, job, account_type, initial_balance)
         self.accounts[account.account_id] = account
         self.export_accounts_to_csv()
-        print(f"Account created for {name}. Account ID: {account.account_id}")
+        print(f"Account created for {first_name} {last_name}. Account ID: {account.account_id}")
         return account.account_id
 
     def delete_account(self, account_id: str):
@@ -238,23 +247,48 @@ class Bank:
             raise ValueError("Account not found.")
         return self.accounts[account_id]
 
+    def update_account_info(self, account_id: str, **kwargs):
+        """
+        Update account information.
+
+        Args:
+            account_id (str): The ID of the account to update.
+            kwargs: Key-value pairs of account attributes to update.
+
+        Raises:
+            ValueError: If the account ID is not found or invalid update fields.
+        """
+        account = self.get_account(account_id)
+        valid_fields = ["first_name", "last_name", "age", "state", "job"]
+        for key, value in kwargs.items():
+            if key in valid_fields:
+                setattr(account, key, value)
+            else:
+                raise ValueError(f"Invalid field: {key}")
+        self.export_accounts_to_csv()
+        print(f"Account {account_id} has been updated.")
+
     def list_accounts(self):
         """List all accounts in the bank."""
         if not self.accounts:
             print("No accounts in the bank.")
         for account_id, account in self.accounts.items():
-            print(f"ID: {account_id} | Name: {account.name} | Type: {account.account_type} | Balance: ${account.balance:.2f}")
+            print(f"ID: {account_id} | Name: {account.first_name} {account.last_name} | Age: {account.age} | State: {account.state} | Job: {account.job} | Type: {account.account_type} | Balance: ${account.balance:.2f}")
 
     def export_accounts_to_csv(self):
         """Export all account data to a CSV file."""
         with open("accounts.csv", "w", newline="") as csvfile:
-            fieldnames = ["account_id", "name", "account_type", "balance"]
+            fieldnames = ["account_id", "first_name", "last_name", "age", "state", "job", "account_type", "balance"]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
             for account in self.accounts.values():
                 writer.writerow({
                     "account_id": account.account_id,
-                    "name": account.name,
+                    "first_name": account.first_name,
+                    "last_name": account.last_name,
+                    "age": account.age,
+                    "state": account.state,
+                    "job": account.job,
                     "account_type": account.account_type,
                     "balance": account.balance,
                 })
@@ -277,10 +311,12 @@ class BankCLI:
             print("4. Transfer Money")
             print("5. View Transaction History")
             print("6. Filter Transactions by Type")
-            print("7. Calculate Interest (Savings Accounts)")
-            print("8. List All Accounts")
-            print("9. Delete Account")
-            print("10. Exit")
+            print("7. View Account Details")
+            print("8. Update Account Information")
+            print("9. Export Transaction History")
+            print("10. List All Accounts")
+            print("11. Delete Account")
+            print("12. Exit")
             choice = input("Choose an option: ")
 
             if choice == "1":
@@ -296,12 +332,16 @@ class BankCLI:
             elif choice == "6":
                 self.filter_transactions()
             elif choice == "7":
-                self.calculate_interest()
+                self.view_account_details()
             elif choice == "8":
-                self.bank.list_accounts()
+                self.update_account_info()
             elif choice == "9":
-                self.delete_account()
+                self.export_transaction_history()
             elif choice == "10":
+                self.bank.list_accounts()
+            elif choice == "11":
+                self.delete_account()
+            elif choice == "12":
                 print("Exiting the banking system. Goodbye!")
                 break
             else:
@@ -309,14 +349,22 @@ class BankCLI:
 
     def create_account(self):
         """Handle account creation."""
-        name = input("Enter account holder's name: ")
+        first_name = input("Enter account holder's first name: ")
+        last_name = input("Enter account holder's last name: ")
+        try:
+            age = int(input("Enter account holder's age: "))
+        except ValueError:
+            print("Invalid input. Age must be a number.")
+            return
+        state = input("Enter account holder's state: ")
+        job = input("Enter account holder's job: ")
         account_type = input("Enter account type (Checking/Savings): ")
         try:
             initial_balance = float(input("Enter initial balance: "))
         except ValueError:
             print("Invalid input. Initial balance must be a number.")
             return
-        self.bank.create_account(name, account_type, initial_balance)
+        self.bank.create_account(first_name, last_name, age, state, job, account_type, initial_balance)
 
     def delete_account(self):
         """Handle account deletion."""
@@ -391,18 +439,6 @@ class BankCLI:
                 print(transaction.to_dict())
         except ValueError as e:
             print(e)
-
-    def calculate_interest(self):
-        """Calculate interest for a savings account."""
-        account_id = input("Enter account ID: ")
-        try:
-            annual_rate = float(input("Enter annual interest rate (e.g., 0.05 for 5%): "))
-            months = int(input("Enter number of months: "))
-            account = self.bank.get_account(account_id)
-            account.calculate_interest(annual_rate, months)
-        except ValueError as e:
-            print(e)
-
 
 if __name__ == "__main__":
     cli = BankCLI()

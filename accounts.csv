@@ -1,21 +1,21 @@
-account_id,name,account_type,balance
-7feaff24-93b0-4531-b563-b42ba9165597,User1,Checking,1300.00
-3caaf610-81fa-4031-8930-db913bbb1ec6,User2,Checking,1000.0
-2939edaa-2f53-4ab2-8ef7-fd9ca501b557,User3,Checking,1000.0
-a6b773a0-e47a-4d23-8dbc-243854053038,User4,Checking,1000.0
-076b2bf6-a598-45e8-ac69-c7b43c42b263,User5,Checking,1000.0
-9e847743-ffea-492e-a02f-ff03c7c3ff57,User6,Checking,1000.0
-9d34d167-b80e-4d4f-8f8f-69ac28c9e319,User7,Checking,1000.0
-d968b03b-f739-49c5-805e-906f620c0743,User8,Checking,1000.0
-051b1053-4f75-4b86-96f4-8d4d4a2ca04d,User9,Checking,1000.0
-0c6d2f53-a177-404c-b5e2-76e2b997302c,User10,Checking,1000.0
-dfcafdf5-c310-4232-99a4-2410fd23da5e,User11,Checking,1000.0
-af65fd2c-e7ab-4c3e-a25a-2af492f1d698,User12,Checking,1000.0
-b43e621a-64c1-4594-a6f0-67451afe52d7,User13,Checking,1000.0
-2940342b-bb52-44f5-b010-9b82fcc7eaaa,User14,Checking,1000.0
-8f67cf58-e8e0-413f-bd39-4ce6f46c95b5,User15,Checking,1000.0
-0ba070da-c511-4f73-958d-3e615de3a74a,User16,Checking,1000.0
-e2538b1b-aa93-4561-b2d4-f1b83a3745e8,User17,Checking,1000.0
-fe726bcc-7bf0-444a-9a93-02ad65f22496,User18,Checking,1000.0
-1de4424b-077a-47db-accd-299e50dd6600,User19,Checking,1000.0
-0f47abce-99d8-4570-adc6-fd14feba4014,User20,Checking,1000.0
+account_id,first_name,last_name,age,state,job,account_type,balance
+b2eef556-19cc-426f-94de-82169b091678,Michael,Williams,67,Massachusetts,Employee,Checking,4498.69
+6f0c8c50-f30c-42b3-b837-ed6ba99c66a4,Elizabeth,Rodriguez,45,West Virginia,Employee,Savings,7940.1
+0f974647-0b6b-4f1e-b6cd-9e613fbc9210,Michael,Davis,62,Colorado,Employee,Checking,1151.39
+64bbf3ec-2b05-470d-82cd-372b65319e60,James,Johnson,78,Wisconsin,Employee,Savings,1197.1
+d8e656b3-19d2-4966-aa03-8c88465d9e0f,James,Williams,79,Missouri,Employee,Checking,7381.5
+90e2b475-46d8-4844-af6d-9db77c8d35e6,Linda,Rodriguez,19,New Jersey,Employee,Savings,1851.29
+f01a56d7-5332-47c5-ac8e-bb5dc797bb8d,Michael,Johnson,63,Kentucky,Employee,Checking,8179.29
+398177ed-be0c-433f-9e92-ed65e72a952e,Elizabeth,Jones,80,Missouri,Employee,Savings,2344.51
+51c990db-e9b6-4b59-9ee2-eba345e58216,Jennifer,Garcia,33,Idaho,Employee,Checking,6836.82
+1edb1a20-8df5-4687-bd8a-c196732507b9,Patricia,Garcia,67,Connecticut,Employee,Savings,5693.92
+27f30125-0172-4edd-81b6-2b7fad125475,John,Jones,26,South Carolina,Employee,Checking,8654.65
+382e61a3-5565-4c97-9d59-78e6f18161ce,Linda,Rodriguez,61,Tennessee,Employee,Savings,5372.2
+533fec9f-a126-4d7a-ab41-9f1a37da2940,Robert,Jones,68,Connecticut,Employee,Checking,4783.02
+a53a7bfb-db0f-4c68-9668-3bc38fca3d29,John,Jones,45,Ohio,Employee,Savings,9597.86
+1bf99fc3-35b8-46e4-904c-c8f7b0042ff1,Linda,Miller,64,Idaho,Employee,Checking,7532.56
+5636dc31-bbe2-4a06-a557-a188840416ac,James,Rodriguez,76,North Carolina,Employee,Savings,8725.08
+189348fa-71e6-4ad2-aef9-2a7e10e1786e,Elizabeth,Rodriguez,25,Arizona,Employee,Checking,5022.04
+297bf70b-4b3d-49e3-b7e0-1aad6a1bad3e,William,Martinez,72,Maryland,Employee,Savings,6626.27
+7047861b-633d-4163-8977-f3e9d8f0ae97,William,Jones,64,North Carolina,Employee,Checking,5641.11
+e6ee2568-e87d-4666-99bc-169921591df9,Elizabeth,Williams,55,Oregon,Employee,Savings,4687.04
