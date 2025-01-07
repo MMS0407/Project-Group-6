@@ -190,9 +190,28 @@ class Bank:
         self.load_initial_accounts()
 
     def load_initial_accounts(self):
-        """Generate and load initial sample accounts into the bank."""
+        first_names = ["James", "Mary", "John", "Patricia", "Robert", "Jennifer", "Michael", "Linda", "William", "Elizabeth"]
+        last_names = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez"]
+        states = [
+            "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware",
+            "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana",
+            "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska",
+            "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio",
+            "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas",
+            "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"
+        ]
+
         for i in range(20):
-            self.create_account(f"User{i+1}", "LastName", 30 + i, "State", "Job", "Checking", 1000.0)
+            first_name = random.choice(first_names)
+            last_name = random.choice(last_names)
+            age = random.randint(18, 80)
+            state = random.choice(states)
+            job = "Employee"
+            account_type = "Checking" if i % 2 == 0 else "Savings"
+            balance = round(random.uniform(100.0, 10000.0), 2)
+
+            self.create_account(first_name, last_name, age, state, job, account_type, balance)
+
         self.export_accounts_to_csv()
 
     def create_account(self, first_name: str, last_name: str, age: int, state: str, job: str, account_type: str = "Checking", initial_balance: float = 0.0) -> str:
