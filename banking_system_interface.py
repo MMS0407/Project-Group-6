@@ -3,9 +3,6 @@ import csv
 from typing import List, Dict, Optional
 import random
 from rich.console import Console
-from rich.text import Text
-
-#TO DO: add colors
 
 class Transaction:
     """Represents a transaction in a banking account."""
@@ -280,26 +277,64 @@ class Bank:
             raise ValueError("Account not found.")
         return self.accounts[account_id]
 
-    def update_account_info(self, account_id: str, **kwargs):
-        """
-        Update account information.
+    # def update_account_info(self, account_id: str, **kwargs):
+    #     """
+    #     Update account information.
 
-        Args:
-            account_id (str): The ID of the account to update.
-            kwargs: Key-value pairs of account attributes to update.
+    #     Args:
+    #         account_id (str): The ID of the account to update.
+    #         kwargs: Key-value pairs of account attributes to update.
 
-        Raises:
-            ValueError: If the account ID is not found or invalid update fields.
-        """
-        account = self.get_account(account_id)
-        valid_fields = ["first_name", "last_name", "age", "state", "job"]
-        for key, value in kwargs.items():
-            if key in valid_fields:
-                setattr(account, key, value)
+    #     Raises:
+    #         ValueError: If the account ID is not found or invalid update fields.
+    #     """
+    #     account = self.get_account(account_id)
+    #     valid_fields = ["first_name", "last_name", "age", "state", "job"]
+    #     for key, value in kwargs.items():
+    #         if key in valid_fields:
+    #             setattr(account, key, value)
+    #         else:
+    #             raise ValueError(f"Invalid field: {key}")
+    #     self.export_accounts_to_csv()
+    #     print(f"Account {account_id} has been updated.")
+
+    def update_account_info(self):
+        """Update account holder's information."""
+        account_id = input("Enter account ID: ")
+        try:
+            account = self.get_account(account_id)
+            print("What would you like to change?")
+            print("1. First Name")
+            print("2. Last Name")
+            print("3. Age")
+            print("4. State")
+            choice = input("Choose an option (1/2/3/4): ")
+
+            if choice == "1":
+                new_first_name = input("Enter new first name: ")
+                account.update_info(first_name=new_first_name)
+            elif choice == "2":
+                new_last_name = input("Enter new last name: ")
+                account.update_info(last_name=new_last_name)
+            elif choice == "3":
+                try:
+                    new_age = int(input("Enter new age: "))
+                    account.update_info(age=new_age)
+                except ValueError:
+                    print("Invalid input. Age must be a number.")
+                    return
+            elif choice == "4":
+                new_state = input("Enter new state: ")
+                account.update_info(state=new_state)
             else:
-                raise ValueError(f"Invalid field: {key}")
+                print("Invalid option. Please try again.")
+                return
+            
+            print("Account information updated successfully.")
+        except ValueError as e:
+            print(e)
+
         self.export_accounts_to_csv()
-        print(f"Account {account_id} has been updated.")
 
     def list_accounts(self):
         """List all accounts in the bank."""
@@ -380,7 +415,7 @@ class BankCLI:
             elif choice == "8":
                 self.view_account_details()
             elif choice == "9":
-                self.update_account_info()
+                self.bank.update_account_info()
             elif choice == "10":
                 self.export_transaction_history()
             elif choice == "11":
@@ -484,42 +519,6 @@ class BankCLI:
         except ValueError as e:
             print(e)
 
-    def update_account_info(self):
-        """Update account holder's information."""
-        account_id = input("Enter account ID: ")
-        try:
-            account = self.bank.get_account(account_id)
-            print("What would you like to change?")
-            print("1. First Name")
-            print("2. Last Name")
-            print("3. Age")
-            print("4. State")
-            choice = input("Choose an option (1/2/3/4): ")
-
-            if choice == "1":
-                new_first_name = input("Enter new first name: ")
-                account.update_info(first_name=new_first_name)
-            elif choice == "2":
-                new_last_name = input("Enter new last name: ")
-                account.update_info(last_name=new_last_name)
-            elif choice == "3":
-                try:
-                    new_age = int(input("Enter new age: "))
-                    account.update_info(age=new_age)
-                except ValueError:
-                    print("Invalid input. Age must be a number.")
-                    return
-            elif choice == "4":
-                new_state = input("Enter new state: ")
-                account.update_info(state=new_state)
-            else:
-                print("Invalid option. Please try again.")
-                return
-            
-            print("Account information updated successfully.")
-        except ValueError as e:
-            print(e)
-
     def export_transaction_history(self):
         """Export transaction history to a file."""
         account_id = input("Enter account ID: ")
@@ -543,7 +542,7 @@ class BankCLI:
         try:
             account = self.bank.get_account(account_id)
             print(f"Account Details for {account_id}:")
-            print(account.get_details())  # Assuming `get_details` is a method in Account class
+            print(account.get_details()) 
         except ValueError as e:
             print(e)
 
