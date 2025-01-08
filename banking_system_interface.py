@@ -66,6 +66,19 @@ class Account:
         self.account_type = account_type
         self.balance = initial_balance
         self.transactions: List[Transaction] = []
+    
+    def update_info(self, first_name=None, last_name=None, age=None, state=None, job=None):
+        """Update account information."""
+        if first_name:
+            self.first_name = first_name
+        if last_name:
+            self.last_name = last_name
+        if age is not None:
+            self.age = age
+        if state:
+            self.state = state
+        if job:
+            self.job = job
 
     def deposit(self, amount: float):
         """
@@ -119,7 +132,8 @@ class Account:
         target_account.transactions.append(Transaction("Transfer In", amount, self.account_id))
         self.export_balance_update()
         target_account.export_balance_update()
-
+    
+        
     def filter_transactions(self, transaction_type: str) -> List[Transaction]:
         """
         Filter transactions by type.
@@ -170,18 +184,6 @@ class Account:
                     "account_type": self.account_type,
                     "balance": f"{self.balance:.2f}",
                 })
-
-    def export_transaction_history_to_csv(self):
-        """
-        Export the transaction history of the account to a separate CSV file.
-        """
-        filename = f"{self.account_id}_transactions.csv"
-        with open(filename, "w", newline="") as csvfile:
-            fieldnames = ["type", "amount", "target_account", "transaction_id"]
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-            writer.writeheader()
-            for transaction in self.transactions:
-                writer.writerow(transaction.to_dict())
 
     def get_details(self):
         """Return a formatted string with account details."""
