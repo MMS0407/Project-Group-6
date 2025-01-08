@@ -340,25 +340,25 @@ class BankCLI:
             
             # Grouping Banking Transactions
             self.console.print("\n[bold green]Banking Transactions:[/bold green]")
-            self.console.print("[yellow]1.[/yellow] Deposit Money")
-            self.console.print("[yellow]2.[/yellow] Withdraw Money")
-            self.console.print("[yellow]3.[/yellow] Transfer Money")
-            self.console.print("[yellow]4.[/yellow] View Transaction History")
-            self.console.print("[yellow]5.[/yellow] Filter Transactions by Type")
+            self.console.print("[bold green]1.[/bold green] Deposit Money")
+            self.console.print("[bold green]2.[/bold green] Withdraw Money")
+            self.console.print("[bold green]3.[/bold green] Transfer Money")
+            self.console.print("[bold green]4.[/bold green] View Transaction History")
+            self.console.print("[bold green]5.[/bold green] Filter Transactions by Type")
             
-            # Grouping Banking Operations
-            self.console.print("\n[bold green]Banking Operations:[/bold green]")
-            self.console.print("[cyan]6.[/cyan] Create Account")
-            self.console.print("[cyan]7.[/cyan] Delete Account")
-            self.console.print("[cyan]8.[/cyan] View Account Details")
-            self.console.print("[cyan]9.[/cyan] Update Account Information")
-            self.console.print("[cyan]10.[/cyan] Export Transaction History")
-            self.console.print("[cyan]11.[/cyan] List All Accounts")
+            # Grouping Account Operations
+            self.console.print("\n[#e72a77]Account Operations:[/#e72a77]")
+            self.console.print("[#e72a77]6.[/#e72a77] Create Account")
+            self.console.print("[#e72a77]7.[/#e72a77] Delete Account")
+            self.console.print("[#e72a77]8.[/#e72a77] View Account Details")
+            self.console.print("[#e72a77]9.[/#e72a77] Update Account Information")
+            self.console.print("[#e72a77]10.[/#e72a77] Export Transaction History")
+            self.console.print("[#e72a77]11.[/#e72a77] List All Accounts")
             
             # Exit Option
-            self.console.print("\n[bold red]12.[/bold red] Exit")
+            self.console.print("\n[bold red]12. Exit[/bold red]")
             
-            choice = input("Choose an option: ")
+            choice = input("\n Choose an option (From 1 to 12): ")
 
             # Handling user choices (same logic as before)
             if choice == "1":
