@@ -277,27 +277,6 @@ class Bank:
             raise ValueError("Account not found.")
         return self.accounts[account_id]
 
-    # def update_account_info(self, account_id: str, **kwargs):
-    #     """
-    #     Update account information.
-
-    #     Args:
-    #         account_id (str): The ID of the account to update.
-    #         kwargs: Key-value pairs of account attributes to update.
-
-    #     Raises:
-    #         ValueError: If the account ID is not found or invalid update fields.
-    #     """
-    #     account = self.get_account(account_id)
-    #     valid_fields = ["first_name", "last_name", "age", "state", "job"]
-    #     for key, value in kwargs.items():
-    #         if key in valid_fields:
-    #             setattr(account, key, value)
-    #         else:
-    #             raise ValueError(f"Invalid field: {key}")
-    #     self.export_accounts_to_csv()
-    #     print(f"Account {account_id} has been updated.")
-
     def update_account_info(self):
         """Update account holder's information."""
         account_id = input("Enter account ID: ")
