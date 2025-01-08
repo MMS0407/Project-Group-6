@@ -1,6 +1,6 @@
 import csv
 from typing import List, Dict
-from transaction import Transaction
+from banking_system_components.transaction import Transaction
 import uuid
 
 class Account:

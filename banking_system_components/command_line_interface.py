@@ -1,4 +1,4 @@
-from bank import Bank
+from banking_system_components.bank import Bank
 from rich.console import Console
 
 

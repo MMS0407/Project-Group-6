@@ -1,7 +1,7 @@
 import csv
 import random
 from typing import Dict
-from account import Account
+from banking_system_components.account import Account
 
 class Bank:
     """Represents a bank with multiple accounts."""
