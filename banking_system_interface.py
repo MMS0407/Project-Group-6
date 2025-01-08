@@ -3,6 +3,7 @@ import csv
 from typing import List, Dict, Optional
 import random
 
+#TO DO: add colors
 
 class Transaction:
     """Represents a transaction in a banking account."""
@@ -19,7 +20,7 @@ class Transaction:
         self.transaction_type = transaction_type
         self.amount = amount
         self.target_account = target_account
-        self.timestamp = uuid.uuid4().hex  # Unique transaction ID
+        self.transaction_id = uuid.uuid4().hex  # Unique transaction ID
 
     def to_dict(self) -> Dict:
         """
@@ -32,7 +33,7 @@ class Transaction:
             "type": self.transaction_type,
             "amount": self.amount,
             "target_account": self.target_account,
-            "timestamp": self.timestamp,
+            "transaction_id": self.transaction_id,
         }
 
 
@@ -174,7 +175,7 @@ class Account:
         """
         filename = f"{self.account_id}_transactions.csv"
         with open(filename, "w", newline="") as csvfile:
-            fieldnames = ["type", "amount", "target_account", "timestamp"]
+            fieldnames = ["type", "amount", "target_account", "transaction_id"]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
             for transaction in self.transactions:
@@ -195,10 +196,7 @@ class Bank:
         states = [
             "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware",
             "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana",
-            "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska",
-            "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio",
-            "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas",
-            "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"
+            "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota"
         ]
 
         for i in range(20):
@@ -206,7 +204,7 @@ class Bank:
             last_name = random.choice(last_names)
             age = random.randint(18, 80)
             state = random.choice(states)
-            job = "Employee"
+            job = "Retired" if age > 67 else random.choice(["Employed", "Unemployed"])
             account_type = "Checking" if i % 2 == 0 else "Savings"
             balance = round(random.uniform(100.0, 10000.0), 2)
 
@@ -456,6 +454,69 @@ class BankCLI:
             print(f"Filtered Transactions ({transaction_type}):")
             for transaction in filtered:
                 print(transaction.to_dict())
+        except ValueError as e:
+            print(e)
+
+    def update_account_info(self):
+        """Update account holder's information."""
+        account_id = input("Enter account ID: ")
+        try:
+            account = self.bank.get_account(account_id)
+            print("What would you like to change?")
+            print("1. First Name")
+            print("2. Last Name")
+            print("3. Age")
+            print("4. State")
+            choice = input("Choose an option (1/2/3/4): ")
+
+            if choice == "1":
+                new_first_name = input("Enter new first name: ")
+                account.update_info(first_name=new_first_name)
+            elif choice == "2":
+                new_last_name = input("Enter new last name: ")
+                account.update_info(last_name=new_last_name)
+            elif choice == "3":
+                try:
+                    new_age = int(input("Enter new age: "))
+                    account.update_info(age=new_age)
+                except ValueError:
+                    print("Invalid input. Age must be a number.")
+                    return
+            elif choice == "4":
+                new_state = input("Enter new state: ")
+                account.update_info(state=new_state)
+            else:
+                print("Invalid option. Please try again.")
+                return
+            
+            print("Account information updated successfully.")
+        except ValueError as e:
+            print(e)
+
+    def export_transaction_history(self):
+        """Export transaction history to a file."""
+        account_id = input("Enter account ID: ")
+        try:
+            account = self.bank.get_account(account_id)
+            transactions = account.get_transaction_history()
+            if not transactions:
+                print("No transactions to export.")
+                return
+            filename = input("Enter filename to export to (e.g., transactions.csv): ")
+            with open(filename, "w") as file:
+                for transaction in transactions:
+                    file.write(f"{transaction}\n")  # Assuming each transaction has a string representation
+            print(f"Transaction history exported to {filename}.")
+        except ValueError as e:
+            print(e)
+
+    def view_account_details(self):
+        """View details of an account."""
+        account_id = input("Enter account ID: ")
+        try:
+            account = self.bank.get_account(account_id)
+            print(f"Account Details for {account_id}:")
+            print(account.get_details())  # Assuming `get_details` is a method in Account class
         except ValueError as e:
             print(e)
 
