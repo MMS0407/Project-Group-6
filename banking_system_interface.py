@@ -10,7 +10,7 @@ class Transaction:
     def __init__(self, transaction_type: str, amount: float, target_account: Optional[str] = None):
         """
         Initialize a transaction.
-
+                                                                 
         Args:
             transaction_type (str): The type of transaction (e.g., Deposit, Withdrawal, Transfer In).
             amount (float): The transaction amount.
