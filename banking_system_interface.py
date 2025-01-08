@@ -2,6 +2,8 @@ import uuid
 import csv
 from typing import List, Dict, Optional
 import random
+from rich.console import Console
+from rich.text import Text
 
 #TO DO: add colors
 
@@ -181,6 +183,18 @@ class Account:
             for transaction in self.transactions:
                 writer.writerow(transaction.to_dict())
 
+    def get_details(self):
+        """Return a formatted string with account details."""
+        return (
+            f"Account ID: {self.account_id}\n"
+            f"Account Holder: {self.first_name} {self.last_name}\n"
+            f"Age: {self.age}\n"
+            f"State: {self.state}\n"
+            f"Job: {self.job}\n"
+            f"Account Type: {self.account_type}\n"
+            f"Balance: ${self.balance:.2f}"
+        )
+
 
 class Bank:
     """Represents a bank with multiple accounts."""
@@ -317,47 +331,58 @@ class BankCLI:
     def __init__(self):
         """Initialize the CLI with a Bank instance."""
         self.bank = Bank()
+        self.console = Console()
 
     def menu(self):
         """Display the banking system menu and handle user input."""
         while True:
-            print("\nBanking System Menu:")
-            print("1. Create Account")
-            print("2. Deposit Money")
-            print("3. Withdraw Money")
-            print("4. Transfer Money")
-            print("5. View Transaction History")
-            print("6. Filter Transactions by Type")
-            print("7. View Account Details")
-            print("8. Update Account Information")
-            print("9. Export Transaction History")
-            print("10. List All Accounts")
-            print("11. Delete Account")
-            print("12. Exit")
+            self.console.print("\n[bold blue]Banking System Menu:[/bold blue]")
+            
+            # Grouping Banking Transactions
+            self.console.print("\n[bold green]Banking Transactions:[/bold green]")
+            self.console.print("[yellow]1.[/yellow] Deposit Money")
+            self.console.print("[yellow]2.[/yellow] Withdraw Money")
+            self.console.print("[yellow]3.[/yellow] Transfer Money")
+            self.console.print("[yellow]4.[/yellow] View Transaction History")
+            self.console.print("[yellow]5.[/yellow] Filter Transactions by Type")
+            
+            # Grouping Banking Operations
+            self.console.print("\n[bold green]Banking Operations:[/bold green]")
+            self.console.print("[cyan]6.[/cyan] Create Account")
+            self.console.print("[cyan]7.[/cyan] Delete Account")
+            self.console.print("[cyan]8.[/cyan] View Account Details")
+            self.console.print("[cyan]9.[/cyan] Update Account Information")
+            self.console.print("[cyan]10.[/cyan] Export Transaction History")
+            self.console.print("[cyan]11.[/cyan] List All Accounts")
+            
+            # Exit Option
+            self.console.print("\n[bold red]12.[/bold red] Exit")
+            
             choice = input("Choose an option: ")
 
+            # Handling user choices (same logic as before)
             if choice == "1":
-                self.create_account()
-            elif choice == "2":
                 self.deposit_money()
-            elif choice == "3":
+            elif choice == "2":
                 self.withdraw_money()
-            elif choice == "4":
+            elif choice == "3":
                 self.transfer_money()
-            elif choice == "5":
+            elif choice == "4":
                 self.view_transaction_history()
-            elif choice == "6":
+            elif choice == "5":
                 self.filter_transactions()
+            elif choice == "6":
+                self.create_account()
             elif choice == "7":
-                self.view_account_details()
-            elif choice == "8":
-                self.update_account_info()
-            elif choice == "9":
-                self.export_transaction_history()
-            elif choice == "10":
-                self.bank.list_accounts()
-            elif choice == "11":
                 self.delete_account()
+            elif choice == "8":
+                self.view_account_details()
+            elif choice == "9":
+                self.update_account_info()
+            elif choice == "10":
+                self.export_transaction_history()
+            elif choice == "11":
+                self.bank.list_accounts()
             elif choice == "12":
                 print("Exiting the banking system. Goodbye!")
                 break
@@ -505,7 +530,7 @@ class BankCLI:
             filename = input("Enter filename to export to (e.g., transactions.csv): ")
             with open(filename, "w") as file:
                 for transaction in transactions:
-                    file.write(f"{transaction}\n")  # Assuming each transaction has a string representation
+                    file.write(f"{transaction}\n") 
             print(f"Transaction history exported to {filename}.")
         except ValueError as e:
             print(e)
