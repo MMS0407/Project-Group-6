@@ -53,7 +53,3 @@ To view the test coverage report, run:
 
 -   `python3 -m coverage report`
     This command helps identify any parts of the codebase that may need additional testing to ensure comprehensive coverage.
-
-### Automated Testing
-
-Our CI/CD pipeline includes automated testing to run tests and report coverage on every push to the repository, ensuring ongoing code quality and detecting issues early.
