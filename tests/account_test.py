@@ -2,8 +2,6 @@ import unittest
 from unittest.mock import call, mock_open, patch
 
 from banking_system_components.account import Account
-from banking_system_components.transaction import Transaction
-
 
 class TestAccount(unittest.TestCase):
 
