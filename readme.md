@@ -35,8 +35,6 @@ Testing was a critical part of our development process, ensuring the reliability
 
 ### Unit Testing
 
-> :warning: **Important**: Run `python3 main.py` before running tests, as `accounts.csv` needs to be initialized!
- 
 We have developed comprehensive unit tests for each component.
 
 -   Run tests with:

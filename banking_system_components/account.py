@@ -1,12 +1,24 @@
 import csv
-from typing import List, Dict
-from banking_system_components.transaction import Transaction
+import os
 import uuid
+from typing import List, Dict
+
+from banking_system_components.transaction import Transaction
+
 
 class Account:
     """Represents a bank account with balance and transaction history."""
 
-    def __init__(self, first_name: str, last_name: str, age: int, state: str, job: str, account_type: str = "Checking", initial_balance: float = 0.0):
+    def __init__(
+        self,
+        first_name: str,
+        last_name: str,
+        age: int,
+        state: str,
+        job: str,
+        account_type: str = "Checking",
+        initial_balance: float = 0.0
+    ) -> None:
         """
         Initialize a bank account.
 
@@ -20,7 +32,8 @@ class Account:
             initial_balance (float): The initial account balance (default: 0.0).
         """
         if account_type not in ["Checking", "Savings"]:
-            raise ValueError("Invalid account type. Must be 'Checking' or 'Savings'.")
+            raise ValueError(
+                "Invalid account type. Must be 'Checking' or 'Savings'.")
         self.account_id = str(uuid.uuid4())
         self.first_name = first_name
         self.last_name = last_name
@@ -30,21 +43,31 @@ class Account:
         self.account_type = account_type
         self.balance = initial_balance
         self.transactions: List[Transaction] = []
-    
-    def update_info(self, first_name=None, last_name=None, age=None, state=None, job=None):
-        """Update account information."""
-        if first_name:
+
+    def update_info(self, first_name: str = None, last_name: str = None, age: int = None, state: str = None, job: str = None) -> None:
+        """
+        Update account information.
+
+        Args:
+            first_name (str, optional): The new first name of the account holder.
+            last_name (str, optional): The new last name of the account holder.
+            age (int, optional): The new age of the account holder.
+            state (str, optional): The new state of the account holder.
+            job (str, optional): The new job title of the account holder.
+        """
+        if first_name is not None:
             self.first_name = first_name
-        if last_name:
+        if last_name is not None:
             self.last_name = last_name
         if age is not None:
             self.age = age
-        if state:
+        if state is not None:
             self.state = state
-        if job:
+        if job is not None:
             self.job = job
+        self.export_balance_update()
 
-    def deposit(self, amount: float):
+    def deposit(self, amount: float) -> None:
         """
         Deposit money into the account.
 
@@ -57,7 +80,7 @@ class Account:
         self.transactions.append(Transaction("Deposit", amount))
         self.export_balance_update()
 
-    def withdraw(self, amount: float):
+    def withdraw(self, amount: float) -> None:
         """
         Withdraw money from the account.
 
@@ -75,7 +98,7 @@ class Account:
         self.transactions.append(Transaction("Withdrawal", amount))
         self.export_balance_update()
 
-    def transfer(self, target_account: 'Account', amount: float):
+    def transfer(self, target_account: 'Account', amount: float) -> None:
         """
         Transfer money to another account.
 
@@ -92,12 +115,13 @@ class Account:
             raise ValueError("Insufficient funds for transfer.")
         self.balance -= amount
         target_account.balance += amount
-        self.transactions.append(Transaction("Transfer Out", amount, target_account.account_id))
-        target_account.transactions.append(Transaction("Transfer In", amount, self.account_id))
+        self.transactions.append(Transaction(
+            "Transfer Out", amount, target_account.account_id))
+        target_account.transactions.append(
+            Transaction("Transfer In", amount, self.account_id))
         self.export_balance_update()
         target_account.export_balance_update()
-    
-        
+
     def filter_transactions(self, transaction_type: str) -> List[Transaction]:
         """
         Filter transactions by type.
@@ -119,17 +143,28 @@ class Account:
         """
         return [t.to_dict() for t in self.transactions]
 
-    def export_balance_update(self):
+    def export_balance_update(self) -> None:
         """
         Export the account balance to the CSV file after any balance update.
+        Ensures the file exists and has a header before reading.
         """
-        with open("accounts.csv", "r") as csvfile:
+        fieldnames = [
+            "account_id", "first_name", "last_name", "age",
+            "state", "job", "account_type", "balance"
+        ]
+
+        if not os.path.exists("accounts.csv"):
+            with open("accounts.csv", "w", newline="") as csvfile:
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                writer.writeheader()
+
+        with open("accounts.csv", "r", newline="") as csvfile:
             reader = list(csv.DictReader(csvfile))
 
         with open("accounts.csv", "w", newline="") as csvfile:
-            fieldnames = ["account_id", "first_name", "last_name", "age", "state", "job", "account_type", "balance"]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
+
             updated = False
             for row in reader:
                 if row["account_id"] == self.account_id:
@@ -149,7 +184,14 @@ class Account:
                     "balance": f"{self.balance:.2f}",
                 })
 
-    def get_details(self):
+    def delete_balance_csv(self) -> None:
+        """Deletes the accounts CSV file. Important for cleanup after testing"""
+        try:
+            os.remove("accounts.csv")
+        except FileNotFoundError:
+            raise FileNotFoundError("Accounts CSV file not found.")
+
+    def get_details(self) -> str:
         """Return a formatted string with account details."""
         return (
             f"Account ID: {self.account_id}\n"
@@ -160,4 +202,3 @@ class Account:
             f"Account Type: {self.account_type}\n"
             f"Balance: ${self.balance:.2f}"
         )
-
