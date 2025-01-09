@@ -35,6 +35,8 @@ Testing was a critical part of our development process, ensuring the reliability
 
 ### Unit Testing
 
+> :warning: **Important**: Run `python3 main.py` before running tests, as `accounts.csv` needs to be initialized!
+ 
 We have developed comprehensive unit tests for each component.
 
 -   Run tests with:
@@ -48,6 +50,8 @@ python3 -m coverage run -m unittest discover -s . -p '*_test.py'
 Integration tests were developed to ensure that different parts of the application work together seamlessly.
 
 ### Coverage Reporting
+
+> :warning: **Important**: Run the testes before trying to load the coverage report!
 
 To view the test coverage report, run:
 

@@ -5,6 +5,9 @@ __pycache__/
 *.pyd
 *.cpython-*.pyc
  
+# Ignore .DS_Store mac file
+.DS_Store
+ 
 # Exclude all files that end with a .cpython-{version}.pyc suffix
 *.cpython-*
  
@@ -36,9 +39,44 @@ htmlcov/
 .hypothesis/
 *.xml
  
+# Translations
+*.mo
+*.pot
+ 
+# Django, Flask, Scrapy, Sphinx, PyBuilder, Jupyter, IPython, pyenv, celery, SageMath specific files
+*.log
+local_settings.py
+db.sqlite3*
+instance/
+.scrapy
+docs/_build/
+target/
+.ipynb_checkpoints
+profile_default/
+ipython_config.py
+.python-version
+celerybeat-schedule
+*.sage.py
+.env*
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+ 
+# IDE specific files
+.vscode/
+.spyderproject
+.spyproject
+.ropeproject
+.idea/
+ 
+# Documentation
+/site
+ 
 # Type checkers and other tools
 .mypy_cache/
 .pyre/
- 
-# VS Code files
-.vscode/
+
+# Temporary CSV file 
+*.csv
