@@ -9,7 +9,6 @@ class Bank:
     def __init__(self):
         """Initialize the bank with an empty account database."""
         self.accounts: Dict[str, Account] = {}
-        self.load_initial_accounts()
 
     def load_initial_accounts(self):
         first_names = ["James", "Mary", "John", "Patricia", "Robert", "Jennifer", "Michael", "Linda", "William", "Elizabeth"]
