@@ -51,5 +51,11 @@ Integration tests were developed to ensure that different parts of the applicati
 
 To view the test coverage report, run:
 
--   `python3 -m coverage report`
-    This command helps identify any parts of the codebase that may need additional testing to ensure comprehensive coverage.
+```bash
+python3 -m coverage report
+```
+
+This command helps identify any parts of the codebase that may need additional testing to ensure comprehensive coverage.
+
+-   Our Coverage Report
+    ![Alt text](assets/Coverage_Report.png)
