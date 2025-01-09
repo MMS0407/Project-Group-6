@@ -8,6 +8,7 @@ class BankCLI:
     def __init__(self):
         """Initialize the CLI with a Bank instance."""
         self.bank = Bank()
+        self.bank.load_initial_accounts()
         self.console = Console()
 
     def menu(self):
