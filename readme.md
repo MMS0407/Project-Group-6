@@ -69,7 +69,7 @@ This will launch the CLI where you can interact with the banking system. The CLI
 -   **Modular Design**: The code is organized into separate modules corresponding to each major component such as accounts, transactions, and the banking CLI.
 -   **External Libraries**: We utilized `rich` for its capabilities in creating enhanced and customizable CLI experiences, providing an engaging and interactive user interface.
 
-## 4. Structure
+## 4. Structure 📂
 The key files are:
 - **banking_system_components/**: This is the core of the project. It contains Python modules for different components of the banking system.
 - **tests/**: Contains unit tests for the different components of the system. Each module (Account, Bank, Transaction) has its respective test file to ensure that the functionality works correctly.

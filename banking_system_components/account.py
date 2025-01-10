@@ -2,9 +2,7 @@ import csv
 import os
 import uuid
 from typing import List, Dict
-
 from banking_system_components.transaction import Transaction
-
 
 class Account:
     """Represents a bank account with balance and transaction history."""
@@ -146,7 +144,6 @@ class Account:
     def export_balance_update(self) -> None:
         """
         Export the account balance to the CSV file after any balance update.
-        Ensures the file exists and has a header before reading.
         """
         fieldnames = [
             "account_id", "first_name", "last_name", "age",

@@ -1,5 +1,4 @@
 from rich.console import Console
-
 from banking_system_components.bank import Bank
 
 
@@ -16,31 +15,22 @@ class BankCLI:
         """Display the banking system menu and handle user input."""
         while True:
             self.console.print("\n[bold blue]Banking System Menu:[/bold blue]")
-
-            self.console.print(
-                "\n[bold green]Banking Transactions:[/bold green]")
+            self.console.print("\n[bold green]Banking Transactions:[/bold green]")
             self.console.print("[bold green]1.[/bold green] Deposit Money")
             self.console.print("[bold green]2.[/bold green] Withdraw Money")
             self.console.print("[bold green]3.[/bold green] Transfer Money")
-            self.console.print(
-                "[bold green]4.[/bold green] View Transaction History")
-            self.console.print(
-                "[bold green]5.[/bold green] Filter Transactions by Type")
-
+            self.console.print("[bold green]4.[/bold green] View Transaction History")
+            self.console.print("[bold green]5.[/bold green] Filter Transactions by Type")
             self.console.print("\n[#e72a77]Account Operations:[/#e72a77]")
             self.console.print("[#e72a77]6.[/#e72a77] Create Account")
             self.console.print("[#e72a77]7.[/#e72a77] Delete Account")
             self.console.print("[#e72a77]8.[/#e72a77] View Account Details")
-            self.console.print(
-                "[#e72a77]9.[/#e72a77] Update Account Details")
-            self.console.print(
-                "[#e72a77]10.[/#e72a77] Export Transaction History")
+            self.console.print("[#e72a77]9.[/#e72a77] Update Account Details")
+            self.console.print("[#e72a77]10.[/#e72a77] Export Transaction History")
             self.console.print("[#e72a77]11.[/#e72a77] List All Accounts")
-
             self.console.print("\n[bold red]12. Exit[/bold red]")
 
             choice = input("\n Choose an option (From 1 to 12): ")
-
             if choice == "1":
                 self.deposit_money()
             elif choice == "2":
@@ -69,23 +59,45 @@ class BankCLI:
             else:
                 print("Invalid option. Please try again.")
 
-    def create_account(self) -> None:
+    def create_account(self) -> None: 
         """Handle account creation."""
         first_name = input("Enter account holder's first name: ")
+        # Validate that first name contains only letters
+        if not first_name.isalpha():
+            print("Invalid input. First name should only contain letters.")
+            return
+
         last_name = input("Enter account holder's last name: ")
+        if not last_name.isalpha():
+            print("Invalid input. Last name should only contain letters.")
+            return
+
         try:
             age = int(input("Enter account holder's age: "))
         except ValueError:
             print("Invalid input. Age must be a number.")
             return
+
         state = input("Enter account holder's state: ")
+        if not state.isalpha():
+            print("Invalid input. State should only contain letters.")
+            return
+
         job = input("Enter account holder's job: ")
+        if not job.isalpha():
+            print("Invalid input. Job should only contain letters.")
+            return
+
         account_type = input("Enter account type (Checking/Savings): ")
+        if account_type not in ["Checking", "Savings"]:
+            print("Invalid input. Account type must be either 'Checking' or 'Savings'.")
+            return
         try:
             initial_balance = float(input("Enter initial balance: "))
         except ValueError:
             print("Invalid input. Initial balance must be a number.")
             return
+
         self.bank.create_account(
             first_name, last_name, age, state, job, account_type, initial_balance)
 
@@ -116,7 +128,7 @@ class BankCLI:
             amount = float(input("Enter withdrawal amount: "))
             account = self.bank.get_account(account_id)
             account.withdraw(amount)
-            print(f"Withdrew ${amount:.2f} from account {account_id}. New balance: ${account.balance:.2f}")  # noqa
+            print(f"Withdrew ${amount:.2f} from account {account_id}. New balance: ${account.balance:.2f}")  
         except ValueError as e:
             print(e)
 
@@ -129,7 +141,7 @@ class BankCLI:
             from_account = self.bank.get_account(from_account_id)
             to_account = self.bank.get_account(to_account_id)
             from_account.transfer(to_account, amount)
-            print(f"Transferred ${amount:.2f} from account {from_account_id} to {to_account_id}.")  # noqa
+            print(f"Transferred ${amount:.2f} from account {from_account_id} to {to_account_id}.")  
         except ValueError as e:
             print(e)
 

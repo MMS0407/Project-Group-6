@@ -1,7 +1,6 @@
 from typing import Dict, Optional
 import uuid
 
-
 class Transaction:
     """Represents a transaction in a banking account."""
 
