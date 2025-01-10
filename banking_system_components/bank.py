@@ -134,9 +134,7 @@ class Bank:
         if not self.accounts:
             print("No accounts in the bank.")
         for account_id, account in self.accounts.items():
-            print(f"ID: {account_id} | Name: {account.first_name} {account.last_name} 
-                  | Age: {account.age} | State: {account.state} | Job: {account.job} 
-                  | Type: {account.account_type} | Balance: ${account.balance:.2f}") 
+            print(f"ID: {account_id} | Name: {account.first_name} {account.last_name}| Age: {account.age} | State: {account.state} | Job: {account.job}| Type: {account.account_type} | Balance: ${account.balance:.2f}") 
 
     def export_accounts_to_csv(self) -> None:
         """Export all account data to a CSV file."""

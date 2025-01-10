@@ -78,7 +78,7 @@ The key files are:
 Overall, the project is organized into the following directories and files:
 ```
 ├── assets/                          # Contains asset files such as images
-│   ├── accounts_dataset_example.png  # Example of an accounts dataset
+│   ├── accounts_dataset_example.png # Example of an accounts dataset
 │   ├── cli_operation.png            # Example of a CLI operation screenshot
 │   ├── command_line_interface.png   # Screenshot of the CLI
 │   └── coverage_report.png          # Code coverage report
