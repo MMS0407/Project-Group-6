@@ -1,8 +1,7 @@
 import unittest
 from unittest.mock import mock_open, patch
-from banking_system_components.bank import Bank
-from banking_system_components.account import Account
 
+from banking_system_components.bank import Bank
 
 class TestBank(unittest.TestCase):
 
@@ -84,6 +83,13 @@ class TestBank(unittest.TestCase):
         with patch('banking_system_components.bank.Bank.create_account') as mocked_create_account:
             self.bank.load_initial_accounts()
             self.assertEqual(mocked_create_account.call_count, 20)
+
+    def test_zzz_delete_csv(self):
+        """ Cleaning up the CSV file after all tests are run. As unittest runs tests in alphabetical order, the function is named that way to ensure it runs last."""
+        self.bank.delete_account_csv()
+        with self.assertRaises(FileNotFoundError):
+            with open("accounts.csv", "r"):
+                pass
 
 
 if __name__ == '__main__':

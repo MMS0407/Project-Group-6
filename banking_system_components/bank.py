@@ -1,18 +1,23 @@
 import csv
+import os
 import random
 from typing import Dict
+
 from banking_system_components.account import Account
+
 
 class Bank:
     """Represents a bank with multiple accounts."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the bank with an empty account database."""
         self.accounts: Dict[str, Account] = {}
 
-    def load_initial_accounts(self):
-        first_names = ["James", "Mary", "John", "Patricia", "Robert", "Jennifer", "Michael", "Linda", "William", "Elizabeth"]
-        last_names = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez"]
+    def load_initial_accounts(self) -> None:
+        first_names = ["James", "Mary", "John", "Patricia", "Robert",
+                       "Jennifer", "Michael", "Linda", "William", "Elizabeth"]
+        last_names = ["Smith", "Johnson", "Williams", "Brown", "Jones",
+                      "Garcia", "Miller", "Davis", "Rodriguez", "Martinez"]
         states = [
             "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware",
             "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana",
@@ -24,15 +29,26 @@ class Bank:
             last_name = random.choice(last_names)
             age = random.randint(18, 80)
             state = random.choice(states)
-            job = "Retired" if age > 67 else random.choice(["Employed", "Unemployed"])
+            job = "Retired" if age > 67 else random.choice(
+                ["Employed", "Unemployed"])
             account_type = "Checking" if i % 2 == 0 else "Savings"
             balance = round(random.uniform(100.0, 10000.0), 2)
 
-            self.create_account(first_name, last_name, age, state, job, account_type, balance)
+            self.create_account(first_name, last_name, age,
+                                state, job, account_type, balance)
 
         self.export_accounts_to_csv()
 
-    def create_account(self, first_name: str, last_name: str, age: int, state: str, job: str, account_type: str = "Checking", initial_balance: float = 0.0) -> str:
+    def create_account(
+        self,
+        first_name: str,
+        last_name: str,
+        age: int,
+        state: str,
+        job: str,
+        account_type: str = "Checking",
+        initial_balance: float = 0.0
+    ) -> str:
         """
         Create a new account.
 
@@ -48,13 +64,14 @@ class Bank:
         Returns:
             str: The ID of the created account.
         """
-        account = Account(first_name, last_name, age, state, job, account_type, initial_balance)
+        account = Account(first_name, last_name, age, state,
+                          job, account_type, initial_balance)
         self.accounts[account.account_id] = account
         self.export_accounts_to_csv()
-        print(f"Account created for {first_name} {last_name}. Account ID: {account.account_id}")
+        print(f"Account created for {first_name} {last_name}. Account ID: {account.account_id}")  # noqa
         return account.account_id
 
-    def delete_account(self, account_id: str):
+    def delete_account(self, account_id: str) -> None:
         """
         Delete an account by ID.
 
@@ -84,7 +101,7 @@ class Bank:
             raise ValueError("Account not found.")
         return self.accounts[account_id]
 
-    def update_account_info(self):
+    def update_account_info(self) -> None:
         """Update account holder's information."""
         account_id = input("Enter account ID: ")
         try:
@@ -115,24 +132,25 @@ class Bank:
             else:
                 print("Invalid option. Please try again.")
                 return
-            
+
             print("Account information updated successfully.")
         except ValueError as e:
             print(e)
 
         self.export_accounts_to_csv()
 
-    def list_accounts(self):
+    def list_accounts(self) -> None:
         """List all accounts in the bank."""
         if not self.accounts:
             print("No accounts in the bank.")
         for account_id, account in self.accounts.items():
-            print(f"ID: {account_id} | Name: {account.first_name} {account.last_name} | Age: {account.age} | State: {account.state} | Job: {account.job} | Type: {account.account_type} | Balance: ${account.balance:.2f}")
+            print(f"ID: {account_id} | Name: {account.first_name} {account.last_name} | Age: {account.age} | State: {account.state} | Job: {account.job} | Type: {account.account_type} | Balance: ${account.balance:.2f}")  # noqa
 
-    def export_accounts_to_csv(self):
+    def export_accounts_to_csv(self) -> None:
         """Export all account data to a CSV file."""
         with open("accounts.csv", "w", newline="") as csvfile:
-            fieldnames = ["account_id", "first_name", "last_name", "age", "state", "job", "account_type", "balance"]
+            fieldnames = ["account_id", "first_name", "last_name",
+                          "age", "state", "job", "account_type", "balance"]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
             for account in self.accounts.values():
@@ -147,3 +165,10 @@ class Bank:
                     "balance": account.balance,
                 })
 
+    def delete_account_csv(self) -> None:
+        """Delete the accounts CSV file. Important for cleanup after testing"""
+        try:
+            os.remove("accounts.csv")
+            print("Accounts CSV file deleted.")
+        except FileNotFoundError:
+            print("Accounts CSV file not found.")
