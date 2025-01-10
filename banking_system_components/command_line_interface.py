@@ -32,7 +32,7 @@ class BankCLI:
             self.console.print("[#e72a77]7.[/#e72a77] Delete Account")
             self.console.print("[#e72a77]8.[/#e72a77] View Account Details")
             self.console.print(
-                "[#e72a77]9.[/#e72a77] Update Account Information")
+                "[#e72a77]9.[/#e72a77] Update Account Details")
             self.console.print(
                 "[#e72a77]10.[/#e72a77] Export Transaction History")
             self.console.print("[#e72a77]11.[/#e72a77] List All Accounts")

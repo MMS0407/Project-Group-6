@@ -153,15 +153,15 @@ class Account:
             "state", "job", "account_type", "balance"
         ]
 
-        if not os.path.exists("accounts.csv"):
-            with open("accounts.csv", "w", newline="") as csvfile:
+        if not os.path.exists("accounts_dataset.csv"):
+            with open("accounts_dataset.csv", "w", newline="") as csvfile:
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                 writer.writeheader()
 
-        with open("accounts.csv", "r", newline="") as csvfile:
+        with open("accounts_dataset.csv", "r", newline="") as csvfile:
             reader = list(csv.DictReader(csvfile))
 
-        with open("accounts.csv", "w", newline="") as csvfile:
+        with open("accounts_dataset.csv", "w", newline="") as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
 
@@ -187,7 +187,7 @@ class Account:
     def delete_balance_csv(self) -> None:
         """Deletes the accounts CSV file. Important for cleanup after testing"""
         try:
-            os.remove("accounts.csv")
+            os.remove("accounts_dataset.csv")
         except FileNotFoundError:
             raise FileNotFoundError("Accounts CSV file not found.")
 

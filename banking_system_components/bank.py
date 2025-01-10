@@ -148,7 +148,7 @@ class Bank:
 
     def export_accounts_to_csv(self) -> None:
         """Export all account data to a CSV file."""
-        with open("accounts.csv", "w", newline="") as csvfile:
+        with open("accounts_dataset.csv", "w", newline="") as csvfile:
             fieldnames = ["account_id", "first_name", "last_name",
                           "age", "state", "job", "account_type", "balance"]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
@@ -168,7 +168,7 @@ class Bank:
     def delete_account_csv(self) -> None:
         """Delete the accounts CSV file. Important for cleanup after testing"""
         try:
-            os.remove("accounts.csv")
+            os.remove("accounts_dataset.csv")
             print("Accounts CSV file deleted.")
         except FileNotFoundError:
             print("Accounts CSV file not found.")
